@@ -1,9 +1,13 @@
 package utils
 
-import "crypto/sha256"
+import (
+	"crypto/sha256"
+	"encoding/hex"
+)
 
-func Sha256(str string) string {
-	h := sha256.New()
-	h.Write([]byte(str))
-	return string(h.Sum(nil))
+func Sha256(text string) string {
+	bv := []byte(text)
+	hash := sha256.Sum256(bv)
+	sha := hex.EncodeToString(hash[:])
+	return sha
 }
