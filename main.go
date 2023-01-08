@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"net/http"
+	"nshare-api/models"
+	"nshare-api/responses"
 	"os"
 	"strconv"
 
@@ -12,6 +14,10 @@ import (
 func main() {
 	sslmode, err := strconv.ParseBool(os.Getenv("SSLMODE"))
 
+	var dbConnector models.DBConnector
+	dbConnector = dbConnector.PrepareVars()
+	dbConnector.Connection = dbConnector.ConnectDB().Connection
+
 	if err != nil {
 		panic(err)
 	}
@@ -19,7 +25,7 @@ func main() {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-
+		responses.SendSucResp(w, "Works")
 	})
 
 	if sslmode {
