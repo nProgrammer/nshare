@@ -19,12 +19,4 @@ RUN go build -o /nshare-api
 WORKDIR /
 RUN rm -r /api
 
-ENV WORKINGPORT=8080
-ENV SSLMODE=false
-ENV DB_SERVERNAME=localhost
-ENV DB_SERVER_PORT=3309
-ENV DB_NAME=nShare
-ENV DB_PASSWD=example
-ENV DB_USER=root
-
 CMD [ "/nshare-api" ]

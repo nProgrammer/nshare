@@ -9,3 +9,11 @@ services:
     network_mode: "host"
     volumes:
       - ./data:/var/nshare-data/
+    environment:
+      - WORKINGPORT=8080
+      - SSLMODE=false
+      - DB_SERVERNAME=localhost
+      - DB_SERVER_PORT=3309
+      - DB_NAME=nShare
+      - DB_PASSWD=example #! Remember to change password
+      - DB_USER=root
