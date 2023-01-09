@@ -16,6 +16,9 @@ ADD utils utils
 
 RUN go build -o /nshare-api
 
+WORKDIR /root/
+RUN mkdir data
+
 WORKDIR /
 RUN rm -r /api
 
