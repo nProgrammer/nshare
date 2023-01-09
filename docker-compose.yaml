@@ -17,3 +17,4 @@ services:
       - DB_NAME=nShare
       - DB_PASSWD=example #! Remember to change password
       - DB_USER=root
+      - FULL_ERRORS=true

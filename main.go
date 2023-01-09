@@ -34,7 +34,7 @@ func main() {
 			if utils.CheckDataDir(dataDirPath) {
 				responses.SendSucResp(w, "Works")
 			} else {
-				responses.SendUnSucResp(w, 500, "Internal Server Error")
+				responses.SendUnSucResp(w, 500, utils.FBErr(dataDirPath+" directory doesn't exists", "Internal Server Error"))
 			}
 		}).Methods("GET")
 
