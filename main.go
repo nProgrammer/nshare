@@ -1,11 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"nshare-api/controllers"
 	"nshare-api/models"
 	"nshare-api/responses"
+	"nshare-api/utils"
 	"os"
 	"strconv"
 
@@ -13,27 +15,37 @@ import (
 )
 
 func main() {
-	sslmode, err := strconv.ParseBool(os.Getenv("SSLMODE"))
+	var dataDirPath string = "/var/nshare-data"
+	isExisting := utils.CheckDataDir(dataDirPath)
+	if isExisting {
+		sslmode, err := strconv.ParseBool(os.Getenv("SSLMODE"))
 
-	var dbConnector models.DBConnector
-	dbConnector = dbConnector.PrepareVars()
-	dbConnector.Connection = dbConnector.ConnectDB().Connection
+		var dbConnector models.DBConnector
+		dbConnector = dbConnector.PrepareVars()
+		dbConnector.Connection = dbConnector.ConnectDB().Connection
 
-	if err != nil {
-		panic(err)
-	}
+		if err != nil {
+			panic(err)
+		}
 
-	r := mux.NewRouter()
+		r := mux.NewRouter()
 
-	r.HandleFunc("/status", func(w http.ResponseWriter, r *http.Request) {
-		responses.SendSucResp(w, "Works")
-	}).Methods("GET")
+		r.HandleFunc("/status", func(w http.ResponseWriter, r *http.Request) {
+			if utils.CheckDataDir(dataDirPath) {
+				responses.SendSucResp(w, "Works")
+			} else {
+				responses.SendUnSucResp(w, 500, "Internal Server Error")
+			}
+		}).Methods("GET")
 
-	r.HandleFunc("/users/initSession", controllers.POSTInitSession(dbConnector.Connection)).Methods("POST")
+		r.HandleFunc("/users/initSession", controllers.POSTInitSession(dbConnector.Connection)).Methods("POST")
 
-	if sslmode {
-		log.Fatal(http.ListenAndServeTLS(":8080", "certificates/origin.pem", "certificates/private.key", r))
+		if sslmode {
+			log.Fatal(http.ListenAndServeTLS(":8080", "certificates/origin.pem", "certificates/private.key", r))
+		} else {
+			log.Fatal(http.ListenAndServe(":"+os.Getenv("WORKINGPORT"), r))
+		}
 	} else {
-		log.Fatal(http.ListenAndServe(":"+os.Getenv("WORKINGPORT"), r))
+		fmt.Println("Error: /var/nshare-data directory doesn't exist")
 	}
 }

@@ -1,6 +1,25 @@
 # nShare API 
 ### Simple API for file sharing
 
+## Preparation before first start-up
+
+Remember to create directory called "data" or something like that - this directory will store every asset uploaded by users (alternatively you can use docker volume).
+
+``docker-compose.yaml`` :
+```yaml
+version: '3.7'
+
+services:
+  nshare-api:
+    container_name: api-nshare
+    build: ./
+    image: api-nshare
+    restart: always
+    network_mode: "host"
+    volumes:
+      - <PATH_TO_YOUR_DIRECTORY_OR_INIT_VOLUME_AND_IMPLEMENT_HERE>:/var/nshare-data/
+```
+
 ## Routes
 1. **Check if API is running correctly**
     
