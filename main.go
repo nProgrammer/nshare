@@ -25,7 +25,7 @@ func main() {
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	r.HandleFunc("/status", func(w http.ResponseWriter, r *http.Request) {
 		responses.SendSucResp(w, "Works")
 	}).Methods("GET")
 
